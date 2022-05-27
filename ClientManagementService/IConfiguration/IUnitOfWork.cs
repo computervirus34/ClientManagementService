@@ -9,6 +9,7 @@ namespace ClientManagementService
     public interface IUnitOfWork
     {
         public IBranchRepository Branches { get; }
+        public IBranchStaffRepository BranchStaffs { get; }
         Task CompleteAsync();
     }
 }

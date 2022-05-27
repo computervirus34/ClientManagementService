@@ -25,6 +25,9 @@ namespace ClientManagementService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Branch>()
+            //    .HasMany(c => c.BranchStaffs)
+            //    .WithOne(e => e.Branch);
 
             modelBuilder.Entity<Branch>(entity =>
             {
