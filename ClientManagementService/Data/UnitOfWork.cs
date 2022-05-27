@@ -12,7 +12,7 @@ namespace ClientManagementService.Data
     {
         private readonly DatabaseContext _context;
         private readonly ILogger _logger;
-
+        public IBranchRepository Branches { get; private set; }
         public UnitOfWork(
             DatabaseContext context,
             ILoggerFactory loggerFactory
@@ -20,6 +20,7 @@ namespace ClientManagementService.Data
         {
             _context = context;
             _logger = loggerFactory.CreateLogger("logs");
+            Branches = new BranchRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

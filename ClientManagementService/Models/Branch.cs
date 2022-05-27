@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ClientManagementService.Models
@@ -20,8 +21,9 @@ namespace ClientManagementService.Models
         public string Contact { get; set; }
         public string Location { get; set; }
         public string Email { get; set; }
-
+        [JsonIgnore]
         public List<BranchStaff> BranchStaffs { get; set; }
+        [JsonIgnore]
         public List<Client> Clients { get; set; }
 
     }
