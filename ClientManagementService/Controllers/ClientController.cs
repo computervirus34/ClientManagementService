@@ -1,10 +1,10 @@
-﻿using ClientManagementService.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClientManagementService.Models;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,13 +12,13 @@ namespace ClientManagementService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BranchStaffController : ControllerBase
+    public class ClientController : ControllerBase
     {
-        private readonly ILogger<BranchStaffController> _logger;
+        private readonly ILogger<ClientController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public BranchStaffController(
-            ILogger<BranchStaffController> logger,
+        public ClientController(
+            ILogger<ClientController> logger,
             IUnitOfWork unitOfWork
             )
         {
@@ -29,35 +29,35 @@ namespace ClientManagementService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var staffs = await _unitOfWork.BranchStaffs.All();
+            var clients = await _unitOfWork.Clients.All();
 
-            return Ok(staffs);
+            return Ok(clients);
         }
 
-        // GET api/<BranchController>/5
+        // GET api/client/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
-            var staffs = await _unitOfWork.BranchStaffs.GetByID(id);
+            var clients = await _unitOfWork.Clients.GetByID(id);
 
-            if (staffs == null)
+            if (clients == null)
                 return NotFound();
 
-            return Ok(staffs);
+            return Ok(clients);
         }
 
         // post api/<BranchController>
         [HttpPost]
-        public async Task<ActionResult<BranchStaff>> Post(BranchStaff branchStaff)
+        public async Task<ActionResult<Client>> Post(Client client)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _unitOfWork.BranchStaffs.Add(branchStaff);
+                    await _unitOfWork.Clients.Add(client);
                     await _unitOfWork.CompleteAsync();
-                    var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
-                    return await Task.FromResult(staffDet);
+                    var clientDet = await _unitOfWork.Clients.GetByID(client.Id);
+                    return await Task.FromResult(clientDet);
                 }
                 catch (Exception ex)
                 {
@@ -69,22 +69,22 @@ namespace ClientManagementService.Controllers
 
         // PUT api/employee/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<BranchStaff>> Put(int id, BranchStaff branchStaff)
+        public async Task<ActionResult<Client>> Put(int id, Client client)
         {
 
-            if (id != branchStaff.Id)
+            if (id != client.Id)
             {
                 return BadRequest();
             }
-            var branchExists = _unitOfWork.BranchStaffs.GetByID(id);
-            if (branchExists == null)
+            var clientExists = _unitOfWork.Clients.GetByID(id);
+            if (clientExists == null)
                 return NotFound();
             try
             {
-                await _unitOfWork.BranchStaffs.Update(branchStaff);
+                await _unitOfWork.Clients.Update(client);
                 await _unitOfWork.CompleteAsync();
-                var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
-                return await Task.FromResult(staffDet);
+                var clientDet = await _unitOfWork.Clients.GetByID(client.Id);
+                return await Task.FromResult(clientDet);
             }
             catch (Exception ex)
             {
@@ -92,18 +92,18 @@ namespace ClientManagementService.Controllers
             }
         }
 
-        // DELETE api/employee/5
+        // DELETE api/client/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BranchStaff>> Delete(int id)
+        public async Task<ActionResult<Client>> Delete(int id)
         {
             try
             {
-                var branchStaff = await _unitOfWork.BranchStaffs.GetByID(id);
-                if (branchStaff == null)
+                var client = await _unitOfWork.Clients.GetByID(id);
+                if (client == null)
                     return NotFound();
-                await _unitOfWork.BranchStaffs.Delete(id);
+                await _unitOfWork.Clients.Delete(id);
                 await _unitOfWork.CompleteAsync();
-                return await Task.FromResult(branchStaff);
+                return await Task.FromResult(client);
 
             }
             catch (Exception ex)

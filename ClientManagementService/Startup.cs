@@ -31,7 +31,9 @@ namespace ClientManagementService
                     (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            
+            services.AddControllers().AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
             services.AddControllers();
         }
 

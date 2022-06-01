@@ -10,6 +10,8 @@ namespace ClientManagementService
     {
         public IBranchRepository Branches { get; }
         public IBranchStaffRepository BranchStaffs { get; }
+        public IClientRepository Clients { get; }
+        public ICurrencyRepository Currencies { get; }
         Task CompleteAsync();
     }
 }

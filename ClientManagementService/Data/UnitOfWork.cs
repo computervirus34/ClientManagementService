@@ -14,6 +14,8 @@ namespace ClientManagementService.Data
         private readonly ILogger _logger;
         public IBranchRepository Branches { get; private set; }
         public IBranchStaffRepository BranchStaffs { get; set; }
+        public IClientRepository Clients { get; private set; }
+        public ICurrencyRepository Currencies { get; set; }
         public UnitOfWork(
             DatabaseContext context,
             ILoggerFactory loggerFactory
@@ -23,6 +25,8 @@ namespace ClientManagementService.Data
             _logger = loggerFactory.CreateLogger("logs");
             Branches = new BranchRepository(_context, _logger);
             BranchStaffs = new BranchStaffRepository(_context, _logger);
+            Clients = new ClientRepository(_context, _logger);
+            Currencies = new CurrencyRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

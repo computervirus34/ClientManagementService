@@ -12,79 +12,79 @@ namespace ClientManagementService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BranchStaffController : ControllerBase
+    public class CurrencyController : ControllerBase
     {
-        private readonly ILogger<BranchStaffController> _logger;
+        private readonly ILogger<CurrencyController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public BranchStaffController(
-            ILogger<BranchStaffController> logger,
+        public CurrencyController(
+            ILogger<CurrencyController> logger,
             IUnitOfWork unitOfWork
             )
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        // GET api/<BranchController>
+        // GET api/<CurrencyController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var staffs = await _unitOfWork.BranchStaffs.All();
+            var currencies = await _unitOfWork.Currencies.All();
 
-            return Ok(staffs);
+            return Ok(currencies);
         }
 
-        // GET api/<BranchController>/5
+        // GET api/<CurrencyController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
-            var staffs = await _unitOfWork.BranchStaffs.GetByID(id);
+            var currencies = await _unitOfWork.Currencies.GetByID(id);
 
-            if (staffs == null)
+            if (currencies == null)
                 return NotFound();
 
-            return Ok(staffs);
+            return Ok(currencies);
         }
 
-        // post api/<BranchController>
+        // post api/<CurrencyController>
         [HttpPost]
-        public async Task<ActionResult<BranchStaff>> Post(BranchStaff branchStaff)
+        public async Task<ActionResult<Currency>> Post(Currency currency)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _unitOfWork.BranchStaffs.Add(branchStaff);
+                    await _unitOfWork.Currencies.Add(currency);
                     await _unitOfWork.CompleteAsync();
-                    var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
-                    return await Task.FromResult(staffDet);
+
+                    return await Task.FromResult(currency);
                 }
                 catch (Exception ex)
                 {
                     return new JsonResult(ex.Message) { StatusCode = 500 };
                 }
             }
+
             return BadRequest();
         }
 
-        // PUT api/employee/5
+        // PUT api/Currency/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<BranchStaff>> Put(int id, BranchStaff branchStaff)
+        public async Task<ActionResult<Currency>> Put(int id, Currency currency)
         {
 
-            if (id != branchStaff.Id)
+            if (id != currency.Id)
             {
                 return BadRequest();
             }
-            var branchExists = _unitOfWork.BranchStaffs.GetByID(id);
-            if (branchExists == null)
+            var currencyExists = _unitOfWork.Currencies.GetByID(id);
+            if (currencyExists == null)
                 return NotFound();
             try
             {
-                await _unitOfWork.BranchStaffs.Update(branchStaff);
+                await _unitOfWork.Currencies.Update(currency);
                 await _unitOfWork.CompleteAsync();
-                var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
-                return await Task.FromResult(staffDet);
+                return await Task.FromResult(currency);
             }
             catch (Exception ex)
             {
@@ -92,18 +92,18 @@ namespace ClientManagementService.Controllers
             }
         }
 
-        // DELETE api/employee/5
+        // DELETE api/Currency/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BranchStaff>> Delete(int id)
+        public async Task<ActionResult<Currency>> Delete(int id)
         {
             try
             {
-                var branchStaff = await _unitOfWork.BranchStaffs.GetByID(id);
-                if (branchStaff == null)
+                var currency = await _unitOfWork.Currencies.GetByID(id);
+                if (currency == null)
                     return NotFound();
-                await _unitOfWork.BranchStaffs.Delete(id);
+                await _unitOfWork.Currencies.Delete(id);
                 await _unitOfWork.CompleteAsync();
-                return await Task.FromResult(branchStaff);
+                return await Task.FromResult(currency);
 
             }
             catch (Exception ex)
