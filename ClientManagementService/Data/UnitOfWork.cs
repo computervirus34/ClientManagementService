@@ -16,6 +16,8 @@ namespace ClientManagementService.Data
         public IBranchStaffRepository BranchStaffs { get; set; }
         public IClientRepository Clients { get; private set; }
         public ICurrencyRepository Currencies { get; set; }
+        public IProductRepository Products { get; set; }
+        public IProductPriceRepository ProductPrices { get; set; }
         public UnitOfWork(
             DatabaseContext context,
             ILoggerFactory loggerFactory
@@ -27,6 +29,8 @@ namespace ClientManagementService.Data
             BranchStaffs = new BranchStaffRepository(_context, _logger);
             Clients = new ClientRepository(_context, _logger);
             Currencies = new CurrencyRepository(_context, _logger);
+            Products = new ProductRepository(_context, _logger);
+            ProductPrices = new ProductPriceRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

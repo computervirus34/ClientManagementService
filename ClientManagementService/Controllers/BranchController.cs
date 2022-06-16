@@ -30,21 +30,21 @@ namespace ClientManagementService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var users = await _unitOfWork.Branches.All();
+            var branches = await _unitOfWork.Branches.All();
 
-            return Ok(users);
+            return Ok(branches);
         }
         
         // GET api/<BranchController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
-            var user = await _unitOfWork.Branches.GetByID(id);
+            var branch = await _unitOfWork.Branches.GetByID(id);
 
-            if (user == null)
+            if (branch == null)
                 return NotFound();
 
-            return Ok(user);
+            return Ok(branch);
         }
 
         // post api/<BranchController>

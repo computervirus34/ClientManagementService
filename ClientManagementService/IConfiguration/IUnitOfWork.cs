@@ -12,6 +12,8 @@ namespace ClientManagementService
         public IBranchStaffRepository BranchStaffs { get; }
         public IClientRepository Clients { get; }
         public ICurrencyRepository Currencies { get; }
+        public IProductRepository Products { get; }
+        public IProductPriceRepository ProductPrices { get; }
         Task CompleteAsync();
     }
 }

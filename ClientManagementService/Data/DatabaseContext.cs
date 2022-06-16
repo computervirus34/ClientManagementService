@@ -96,6 +96,7 @@ namespace ClientManagementService.Data
             {
                 entity.ToTable("Product");
                 entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.Code).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.Name).HasMaxLength(200).IsUnicode(false).IsRequired();
                 entity.Property(e => e.ProductCategoryId).IsUnicode(false).IsRequired();
                 entity.Property(e => e.Type).HasMaxLength(200).IsUnicode(false);
