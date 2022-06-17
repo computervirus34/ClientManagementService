@@ -18,6 +18,10 @@ namespace ClientManagementService.Data
         public ICurrencyRepository Currencies { get; set; }
         public IProductRepository Products { get; set; }
         public IProductPriceRepository ProductPrices { get; set; }
+        public IOfferRepository Offers { get; set; }
+        public IOfferItemRepository OfferItems { get; set; }
+        public IOrderRepository Orders { get; set; }
+        public IOrderItemRepository OrderItems { get; set; }
         public UnitOfWork(
             DatabaseContext context,
             ILoggerFactory loggerFactory
@@ -31,6 +35,10 @@ namespace ClientManagementService.Data
             Currencies = new CurrencyRepository(_context, _logger);
             Products = new ProductRepository(_context, _logger);
             ProductPrices = new ProductPriceRepository(_context, _logger);
+            Offers = new OfferRepository(_context, _logger);
+            OfferItems = new OfferItemRepository(_context, _logger);
+            Orders = new OrderRepository(_context, _logger);
+            OrderItems = new OrderItemRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

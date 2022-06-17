@@ -134,6 +134,8 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.OfferTotal).IsUnicode(false).HasColumnType("decimal(10,3)").IsRequired();
                 entity.Property(e => e.OfferTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OfferDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.OriginalOfferTotal).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100).IsUnicode(false);
             });
 
@@ -165,6 +167,8 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.OrderTotal).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
                 entity.Property(e => e.OrderTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OrderDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.OriginalOrderTotal).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100).IsUnicode(false);
                 entity.Property(e => e.IsFromOffer).IsUnicode(false).IsRequired();
                 entity.Property(e => e.OfferId).IsUnicode(false);

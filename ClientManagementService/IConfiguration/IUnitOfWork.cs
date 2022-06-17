@@ -14,6 +14,10 @@ namespace ClientManagementService
         public ICurrencyRepository Currencies { get; }
         public IProductRepository Products { get; }
         public IProductPriceRepository ProductPrices { get; }
+        public IOfferRepository Offers { get; }
+        public IOfferItemRepository OfferItems { get; }
+        public IOrderRepository Orders { get; }
+        public IOrderItemRepository OrderItems { get; }
         Task CompleteAsync();
     }
 }

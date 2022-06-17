@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +23,8 @@ namespace ClientManagementService.Models
         public decimal OfferTotal { get; set; }
         public decimal OfferTax { get; set; }
         public decimal OfferDiscount { get; set; }
+        public decimal OriginalOfferTotal { get; set; }
+        public string Comment { get; set; }
         public string CreatedBy { get; set; }
         public List<OfferItem> OfferItems { get; set; }
     }
