@@ -8,8 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ClientManagementService.Controllers
 {
     [Route("api/[controller]")]
@@ -60,6 +58,7 @@ namespace ClientManagementService.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Product product)
         {
+            try { 
             if(product==null || product.ProductPrices == null)
             {
                 return BadRequest();
@@ -74,6 +73,11 @@ namespace ClientManagementService.Controllers
             await _unitOfWork.CompleteAsync();
             await Task.FromResult(product);
             return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message) { StatusCode = 500 };
+            }
         }
 
         // PUT api/<ProductController>/5
