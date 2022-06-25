@@ -25,6 +25,9 @@ namespace ClientManagementService.Models
         public decimal OrderTotal { get; set; }
         public decimal OrderTax { get; set; }
         public decimal OrderDiscount { get; set; }
+        public decimal NetworkSurcharge { get; set; }
+        public decimal SoftwareMaintenance { get; set; }
+        public decimal ManualDiscount { get; set; }
         public decimal OriginalOrderTotal { get; set; }
         public string Comment { get; set; }
         public string CreatedBy { get; set; }

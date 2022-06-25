@@ -22,8 +22,6 @@ namespace ClientManagementService.Data
         public virtual DbSet<BranchStaff> BranchStaffs { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
-
-
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductPrice> ProductPrices { get; set; }
@@ -103,7 +101,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.Descripion).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.AvailableQuantity).IsUnicode(false).IsRequired();
                 entity.Property(e => e.Duration).HasMaxLength(20).IsUnicode(false);
-                entity.Property(e => e.IsLicenseProduct).IsRequired().IsRequired();
+                entity.Property(e => e.IsLicenseProduct).IsRequired();
                 entity.Property(e => e.LicenseType).HasMaxLength(50).IsUnicode(false);
                 entity.Property(e => e.ProtectionType).HasMaxLength(50).IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
@@ -134,6 +132,9 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.OfferTotal).IsUnicode(false).HasColumnType("decimal(10,3)").IsRequired();
                 entity.Property(e => e.OfferTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OfferDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.NetworkSurcharge).IsUnicode(false).HasColumnType("decimal(10,3)");
+                entity.Property(e => e.SoftwareMaintenance).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.ManualDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OriginalOfferTotal).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100).IsUnicode(false);
@@ -152,7 +153,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.IsDiscountApplied).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.DiscountAmount).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OriginalProductCost).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
-                entity.Property(e => e.ItemWeight).IsUnicode(false);
+                entity.Property(e => e.ItemWeight).HasMaxLength(20).IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
             });
 
@@ -167,6 +168,9 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.OrderTotal).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
                 entity.Property(e => e.OrderTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OrderDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.NetworkSurcharge).IsUnicode(false).HasColumnType("decimal(10,3)");
+                entity.Property(e => e.SoftwareMaintenance).HasColumnType("decimal(10,3)").IsUnicode(false);
+                entity.Property(e => e.ManualDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OriginalOrderTotal).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100).IsUnicode(false);
@@ -187,7 +191,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.IsDiscountApplied).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.DiscountAmount).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OriginalProductCost).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
-                entity.Property(e => e.ItemWeight).IsUnicode(false);
+                entity.Property(e => e.ItemWeight).HasMaxLength(20).IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
             });
 

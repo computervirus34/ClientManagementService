@@ -23,6 +23,9 @@ namespace ClientManagementService.Models
         public decimal OfferTotal { get; set; }
         public decimal OfferTax { get; set; }
         public decimal OfferDiscount { get; set; }
+        public decimal NetworkSurcharge { get; set; }
+        public decimal SoftwareMaintenance { get; set; }
+        public decimal ManualDiscount { get; set; }
         public decimal OriginalOfferTotal { get; set; }
         public string Comment { get; set; }
         public string CreatedBy { get; set; }
