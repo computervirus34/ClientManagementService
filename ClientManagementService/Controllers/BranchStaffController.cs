@@ -1,4 +1,5 @@
 ﻿using ClientManagementService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ClientManagementService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BranchStaffController : ControllerBase
@@ -48,7 +50,7 @@ namespace ClientManagementService.Controllers
 
         // post api/<BranchController>
         [HttpPost]
-        public async Task<ActionResult<BranchStaff>> Post(BranchStaff branchStaff)
+        public async Task<ActionResult<BranchStaff>> Post([FromBody] BranchStaff branchStaff)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +59,8 @@ namespace ClientManagementService.Controllers
                     await _unitOfWork.BranchStaffs.Add(branchStaff);
                     await _unitOfWork.CompleteAsync();
                     var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
-                    return await Task.FromResult(staffDet);
+                    await Task.FromResult(staffDet);
+                    return Ok(new { Status = "Success", Message = "Staff created successfully." });
                 }
                 catch (Exception ex)
                 {

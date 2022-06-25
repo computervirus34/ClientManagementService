@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClientManagementService.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ClientManagementService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase

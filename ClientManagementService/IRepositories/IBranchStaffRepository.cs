@@ -8,5 +8,6 @@ namespace ClientManagementService.IRepositories
 {
     public interface IBranchStaffRepository : IGenericRepository<BranchStaff>
     {
+        Task<BranchStaff> ValidateUser(string userId, string password);
     }
 }

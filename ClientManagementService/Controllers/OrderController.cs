@@ -1,4 +1,5 @@
 ﻿using ClientManagementService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ClientManagementService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -63,7 +65,7 @@ namespace ClientManagementService.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message) { StatusCode = 500 };
+                return new JsonResult(ex.InnerException.Message) { StatusCode = 500 };
             }
         }
 

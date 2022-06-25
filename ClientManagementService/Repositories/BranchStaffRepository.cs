@@ -93,5 +93,10 @@ namespace ClientManagementService.Repositories
                 return false;
             }
         }
+
+        public async Task<BranchStaff> ValidateUser(string userId, string password)
+        {
+            return await _context.BranchStaffs.FirstOrDefaultAsync(o => o.UserId == userId && o.Password == password);
+        }
     }
 }

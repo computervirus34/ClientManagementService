@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace ClientManagementService.Models
@@ -24,6 +25,7 @@ namespace ClientManagementService.Models
         public string Email { get; set; }
         public String Location { get; set; }
         public int BranchId { get; set; }
+        [JsonIgnore]
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
     }
