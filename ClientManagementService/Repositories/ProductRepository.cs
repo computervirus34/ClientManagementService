@@ -101,7 +101,7 @@ namespace ClientManagementService.Repositories
 
         public async Task<ProductPriceCalculationModel> GetProductPrice(int prodcutId, int quantity, int clientId)
         {
-            decimal productCost = 0;
+            decimal productCost = 0, productDiscount=0;
             var clientDet = await _context.Clients
                 .Where(o => o.Id == clientId).FirstOrDefaultAsync();
 
@@ -111,11 +111,15 @@ namespace ClientManagementService.Repositories
             var productPrice = await _context.ProductPrices.Where(o => o.ProductId == prodcutId
                 && o.CurrencyId == clientDet.CurrencyId).FirstOrDefaultAsync();
 
-            var previousPurchase = await _context.Orders
-                .Include(i => i.OrderItems.Where(i => i.ProductId == prodcutId))
-                .Where(o => o.ClientID ==clientId)
-                .Select(o=>o.OrderItems.Sum(i=>i.Quantity))
-                .FirstOrDefaultAsync();
+            var previousPurchase = _context.Orders
+                .SelectMany(orderItems => orderItems.OrderItems.Where(i=>i.ProductId==prodcutId))
+                .Sum(orderItems => (int?)orderItems.Quantity) ?? 0;
+
+            //var previousPurchase = await _context.Orders
+            //    .Include(i => i.OrderItems.Where(i => i.ProductId == prodcutId))
+            //    .Where(o => o.ClientID ==clientId)
+            //    .Select(o=>o.OrderItems.Sum(i=>i.Quantity))
+            //    .FirstOrDefaultAsync();
 
             if (productDetails.IsLicenseProduct && productDetails.LicenseType == "N")
             {
@@ -126,12 +130,13 @@ namespace ClientManagementService.Repositories
                 
                 foreach(var rate in discountRates)
                 {
-                    if(quantity+previousPurchase <= rate.SlabTo)
+                    if(quantity + previousPurchase >= rate.SlabFrom && quantity + previousPurchase <= rate.SlabTo)
                     {
                         productCost = (quantity * productPrice.UnitPrice * rate.DiscountRate)/100;
+                        productDiscount = (quantity * productPrice.UnitPrice) - productCost;
                     }
                 }
-                return new ProductPriceCalculationModel { Quantity = quantity, DiscountAmount = 0, ProductCost = productCost, GSTAmount = 0 };
+                return new ProductPriceCalculationModel { Quantity = quantity, DiscountAmount = productDiscount, ProductCost = productCost, GSTAmount = 0 };
             }
             else
             {

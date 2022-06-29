@@ -20,6 +20,8 @@ namespace ClientManagementService.Models
         public DateTime OfferDate { get; set; }
         public string Description { get; set; }
         public string CustomerCurrency { get; set; }
+        public string ArticleNumber { get; set; }
+        public string LicenseNumber { get; set; }
         public decimal OfferTotal { get; set; }
         public decimal OfferTax { get; set; }
         public decimal OfferDiscount { get; set; }

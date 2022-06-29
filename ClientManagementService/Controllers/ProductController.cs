@@ -133,13 +133,14 @@ namespace ClientManagementService.Controllers
             }
         }
 
-        [HttpDelete("{prodcutId}/{quantity}/{clientId}")]
-        public async Task<ActionResult<ProductPriceCalculationModel>> GetProductPrice(int prodcutId, 
+        //[Route("api/[controller]/ProductPrice/{prodcutId}/{quantity}/{clientId}")]
+        [HttpGet("{id}/{quantity}/{clientId}")]
+        public async Task<ActionResult<ProductPriceCalculationModel>> GetProductPrice(int id, 
             int quantity, int clientId)
         {
             try
             {
-                var productPrice = await _unitOfWork.Products.GetProductPrice(prodcutId, quantity, clientId);
+                var productPrice = await _unitOfWork.Products.GetProductPrice(id, quantity, clientId);
                 if (productPrice == null)
                     return NotFound();
                 

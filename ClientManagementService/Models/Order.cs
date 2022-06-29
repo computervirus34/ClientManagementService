@@ -22,6 +22,8 @@ namespace ClientManagementService.Models
         public DateTime OrderDate { get; set; }
         public string Description { get; set; }
         public string CustomerCurrency { get; set; }
+        public string ArticleNumber { get; set; }
+        public string LicenseNumber { get; set; }
         public decimal OrderTotal { get; set; }
         public decimal OrderTax { get; set; }
         public decimal OrderDiscount { get; set; }

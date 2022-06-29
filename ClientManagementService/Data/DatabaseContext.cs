@@ -130,6 +130,8 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.BranchId).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.Description).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CustomerCurrency).HasMaxLength(3).IsUnicode(false).IsRequired();
+                entity.Property(e => e.ArticleNumber).HasMaxLength(20).IsUnicode(false);
+                entity.Property(e => e.LicenseNumber).HasMaxLength(20).IsUnicode(false);
                 entity.Property(e => e.OfferTotal).IsUnicode(false).HasColumnType("decimal(10,3)").IsRequired();
                 entity.Property(e => e.OfferTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OfferDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
@@ -166,6 +168,8 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.BranchId).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.Description).HasMaxLength(500).IsUnicode(false);
                 entity.Property(e => e.CustomerCurrency).HasMaxLength(3).IsUnicode(false).IsRequired();
+                entity.Property(e => e.ArticleNumber).HasMaxLength(20).IsUnicode(false);
+                entity.Property(e => e.LicenseNumber).HasMaxLength(20).IsUnicode(false);
                 entity.Property(e => e.OrderTotal).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
                 entity.Property(e => e.OrderTax).HasColumnType("decimal(10,3)").IsUnicode(false);
                 entity.Property(e => e.OrderDiscount).HasColumnType("decimal(10,3)").IsUnicode(false);
