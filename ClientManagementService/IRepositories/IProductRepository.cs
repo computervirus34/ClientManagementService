@@ -10,5 +10,6 @@ namespace ClientManagementService.IRepositories
     {
         //Task<IEnumerable<Product>> GetByCategory(int category, int currencyId);
         //Task<Product> GetPriceByClient(int Id, int client);
+        Task<ProductPriceCalculationModel> GetProductPrice(int prodcutId, int quantity, int clientId);
     }
 }

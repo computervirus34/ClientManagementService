@@ -32,4 +32,12 @@ namespace ClientManagementService.Models
         public ProductCategory ProductCategory { get; set; }
         public List<ProductPrice> ProductPrices { get; set; }
     }
+
+    public class ProductPriceCalculationModel
+    {
+        public decimal Quantity { get; set; }
+        public decimal GSTAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal ProductCost { get; set; }
+    }
 }

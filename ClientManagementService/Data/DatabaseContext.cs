@@ -29,6 +29,7 @@ namespace ClientManagementService.Data
         public virtual DbSet<OfferItem> OfferItems { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<DiscountRateConfig> DiscountRates { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Branch>()
@@ -193,6 +194,18 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.OriginalProductCost).HasColumnType("decimal(10,3)").IsUnicode(false).IsRequired();
                 entity.Property(e => e.ItemWeight).HasMaxLength(20).IsUnicode(false);
                 entity.Property(e => e.Comment).HasMaxLength(500).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<DiscountRateConfig>(entity =>
+            {
+                entity.ToTable("DiscountRate");
+                entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.LicenseType).HasMaxLength(20).IsUnicode(false).IsRequired();
+                entity.Property(e => e.SlabFrom).IsRequired().IsUnicode(false);
+                entity.Property(e => e.SlabTo).IsRequired().IsUnicode(false);
+                entity.Property(e => e.DiscountRate).HasColumnType("decimal(10,3)").IsRequired().IsUnicode(false);
+                entity.Property(e => e.IsActive).HasMaxLength(10).IsUnicode(false);
+                entity.Property(e => e.CreatedOn).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

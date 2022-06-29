@@ -132,5 +132,24 @@ namespace ClientManagementService.Controllers
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
+
+        [HttpDelete("{prodcutId}/{quantity}/{clientId}")]
+        public async Task<ActionResult<ProductPriceCalculationModel>> GetProductPrice(int prodcutId, 
+            int quantity, int clientId)
+        {
+            try
+            {
+                var productPrice = await _unitOfWork.Products.GetProductPrice(prodcutId, quantity, clientId);
+                if (productPrice == null)
+                    return NotFound();
+                
+                return await Task.FromResult(productPrice);
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message) { StatusCode = 500 };
+            }
+        }
     }
 }

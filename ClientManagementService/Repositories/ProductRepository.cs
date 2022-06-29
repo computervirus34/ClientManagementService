@@ -99,6 +99,47 @@ namespace ClientManagementService.Repositories
             }
         }
 
+        public async Task<ProductPriceCalculationModel> GetProductPrice(int prodcutId, int quantity, int clientId)
+        {
+            decimal productCost = 0;
+            var clientDet = await _context.Clients
+                .Where(o => o.Id == clientId).FirstOrDefaultAsync();
+
+            var productDetails = await _context.Products
+                .Where(o=>o.Id==prodcutId).FirstOrDefaultAsync();
+
+            var productPrice = await _context.ProductPrices.Where(o => o.ProductId == prodcutId
+                && o.CurrencyId == clientDet.CurrencyId).FirstOrDefaultAsync();
+
+            var previousPurchase = await _context.Orders
+                .Include(i => i.OrderItems.Where(i => i.ProductId == prodcutId))
+                .Where(o => o.ClientID ==clientId)
+                .Select(o=>o.OrderItems.Sum(i=>i.Quantity))
+                .FirstOrDefaultAsync();
+
+            if (productDetails.IsLicenseProduct && productDetails.LicenseType == "N")
+            {
+                var discountRates = await _context.DiscountRates
+                    .Where(o => o.IsActive == "Y")
+                    .OrderBy(o=>o.SlabFrom)
+                    .ToListAsync();
+                
+                foreach(var rate in discountRates)
+                {
+                    if(quantity+previousPurchase <= rate.SlabTo)
+                    {
+                        productCost = (quantity * productPrice.UnitPrice * rate.DiscountRate)/100;
+                    }
+                }
+                return new ProductPriceCalculationModel { Quantity = quantity, DiscountAmount = 0, ProductCost = productCost, GSTAmount = 0 };
+            }
+            else
+            {
+                productCost = quantity * productPrice.UnitPrice;
+                return new ProductPriceCalculationModel{ Quantity = quantity, DiscountAmount = 0, ProductCost = productCost, GSTAmount = 0 };
+            }
+        }
+
         //public async Task<Product> GetByClientAndCategory(int client, int category)
         //{
         //    try
