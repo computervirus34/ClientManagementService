@@ -16,6 +16,7 @@ namespace ClientManagementService.Models
         }
         [Key]
         public int Id { get; set; }
+        [Required]
         public string BranchName { get; set; }
         public string ManagerName { get; set; }
         public string Contact { get; set; }

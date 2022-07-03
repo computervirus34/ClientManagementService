@@ -15,8 +15,11 @@ namespace ClientManagementService.Models
         }
         [Key]
         public int Id { get; set; }
+        [Required]
         public int ClientID { get; set; }
+        [Required]
         public int BranchId { get; set; }
+        [Required]
         public DateTime OfferDate { get; set; }
         public string Description { get; set; }
         public string CustomerCurrency { get; set; }
@@ -28,6 +31,7 @@ namespace ClientManagementService.Models
         public decimal NetworkSurcharge { get; set; }
         public decimal SoftwareMaintenance { get; set; }
         public decimal ManualDiscount { get; set; }
+        [Required]
         public decimal OriginalOfferTotal { get; set; }
         public string Comment { get; set; }
         public string CreatedBy { get; set; }

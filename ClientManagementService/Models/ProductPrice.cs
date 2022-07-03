@@ -12,8 +12,11 @@ namespace ClientManagementService.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int  ProductId { get; set; }
+        [Required]
         public int CurrencyId { get; set; }
+        [Required]
         public decimal UnitPrice { get; set; }
         public bool GSTApplicable { get; set; }
         public bool IsActive { get; set; }

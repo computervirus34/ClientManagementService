@@ -11,10 +11,15 @@ namespace ClientManagementService.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string LicenseType { get; set; }
+        [Required]
         public int SlabFrom { get; set; }
+        [Required]
         public int SlabTo { get; set; }
+        [Required]
         public decimal DiscountRate { get; set; }
+        [Required]
         public string IsActive { get; set; }
         [JsonIgnore]
         public DateTime CreatedOn { get; set; }

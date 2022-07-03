@@ -27,6 +27,7 @@ namespace ClientManagementService.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var products = await _unitOfWork.Products.All();

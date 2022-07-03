@@ -32,16 +32,18 @@ namespace ClientManagementService.Controllers
             _configuration = config;
         }
         [HttpPost]
-        public async Task<IActionResult> Post(BranchStaff _userData)
+        public async Task<IActionResult> Post(UserToken _userData)
         {
-            if (_userData != null && _userData.UserId != null && _userData.Password != null)
+            try
             {
-                var user = await GetUser(_userData.UserId, _userData.Password);
-
-                if (user != null)
+                if (_userData != null && _userData.UserId != null && _userData.Password != null)
                 {
-                    //create claims details based on the user information
-                    var claims = new[] {
+                    var user = await _unitOfWork.BranchStaffs.ValidateUser(_userData.UserId, _userData.Password);
+
+                    if (user != null)
+                    {
+                        //create claims details based on the user information
+                        var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -51,35 +53,35 @@ namespace ClientManagementService.Controllers
                         new Claim("Email", user.Email)
                     };
 
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var token = new JwtSecurityToken(
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"],
-                        claims,
-                        expires: DateTime.UtcNow.AddMinutes(30),
-                        signingCredentials: signIn);
-                    return Ok(new
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMinutes(30),
+                            signingCredentials: signIn);
+                        return Ok(new
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            Expiration = token.ValidTo
+                        });
+                        //return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    }
+                    else
                     {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token),
-                        Expiration = token.ValidTo
-                    });
-                    //return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                        return BadRequest("Invalid credentials");
+                    }
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    return BadRequest();
                 }
-            }
-            else
+            }catch(Exception ex)
             {
-                return BadRequest();
+                _logger.LogError(ex.InnerException.Message);
+                return BadRequest(ex);
             }
-        }
-
-        private async Task<BranchStaff> GetUser(string userId, string password)
-        {
-            return await _unitOfWork.BranchStaffs.ValidateUser(userId, password);
         }
     }
 }

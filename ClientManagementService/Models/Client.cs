@@ -11,12 +11,15 @@ namespace ClientManagementService.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string CompanyName { get; set; }
         public string ContactPerson { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
         public string Location { get; set; }
+        [Required]
         public int BranchId { get; set; }
+        [Required]
         public int CurrencyId { get; set; }
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }

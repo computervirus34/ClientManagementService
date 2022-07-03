@@ -11,14 +11,19 @@ namespace ClientManagementService.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int OfferId { get; set; }
+        [Required]
         public int ProductId { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public decimal UnitPrice { get; set; }
         public bool IsTaxApplied { get; set; }
         public decimal TaxAmount { get; set; }
         public bool IsDiscountApplied { get; set; }
         public decimal DiscountAmount { get; set; }
+        [Required]
         public decimal OriginalProductCost { get; set; }
         public string ItemWeight { get; set; }
         public string Comment { get; set; }

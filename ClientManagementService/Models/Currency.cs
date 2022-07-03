@@ -15,6 +15,7 @@ namespace ClientManagementService.Models
         }
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Code { get; set; }
         public string Symbol { get; set; }
         [JsonIgnore]

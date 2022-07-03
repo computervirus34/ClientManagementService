@@ -16,14 +16,19 @@ namespace ClientManagementService.Models
         }
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Code { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int ProductCategoryId { get; set; }
         public string Type { get; set; }
         public string Descripion { get; set; }
         public int AvailableQuantity { get; set; }
         public string Duration { get; set; }
+        [Required]
         public bool IsLicenseProduct { get; set; }
+        [Required]
         public string LicenseType { get; set; }
         public string ProtectionType { get; set; }
         public string Comment { get; set; }

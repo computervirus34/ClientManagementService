@@ -27,13 +27,14 @@ namespace ClientManagementService.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var orders = await _unitOfWork.Orders.All();
 
             return Ok(orders);
         }
-
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
             var order = await _unitOfWork.Orders.GetByID(id);

@@ -56,6 +56,7 @@ namespace ClientManagementService.Controllers
             {
                 try
                 {
+                    branchStaff.UserId = branchStaff.Email;
                     await _unitOfWork.BranchStaffs.Add(branchStaff);
                     await _unitOfWork.CompleteAsync();
                     var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
