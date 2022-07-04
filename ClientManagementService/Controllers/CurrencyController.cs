@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> Get()
         {
             var currencies = await _unitOfWork.Currencies.All();
-
+            _logger.LogInformation($"Total currency:{currencies.Count()}");
             return Ok(currencies);
         }
 
@@ -40,29 +41,32 @@ namespace ClientManagementService.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
-            var currencies = await _unitOfWork.Currencies.GetByID(id);
+            var currencie = await _unitOfWork.Currencies.GetByID(id);
 
-            if (currencies == null)
+            if (currencie == null)
                 return NotFound();
-
-            return Ok(currencies);
+            _logger.LogInformation($"Currency Info:{JsonConvert.SerializeObject(currencie)}");
+            return Ok(currencie);
         }
 
         // post api/<CurrencyController>
         [HttpPost]
         public async Task<ActionResult<Currency>> Post(Currency currency)
         {
+            _logger.LogInformation($"Currency Info:{JsonConvert.SerializeObject(currency)}");
             if (ModelState.IsValid)
             {
                 try
                 {
                     await _unitOfWork.Currencies.Add(currency);
                     await _unitOfWork.CompleteAsync();
+                    _logger.LogInformation($"{currency.Code} added successfully.");
 
                     return await Task.FromResult(currency);
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return new JsonResult(ex.Message) { StatusCode = 500 };
                 }
             }
@@ -74,6 +78,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Currency>> Put(int id, Currency currency)
         {
+            _logger.LogInformation($"Currency Update Info:{JsonConvert.SerializeObject(currency)}");
 
             if (id != currency.Id)
             {
@@ -86,10 +91,12 @@ namespace ClientManagementService.Controllers
             {
                 await _unitOfWork.Currencies.Update(currency);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{currency.Code} updated successfully.");
                 return await Task.FromResult(currency);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
@@ -105,11 +112,13 @@ namespace ClientManagementService.Controllers
                     return NotFound();
                 await _unitOfWork.Currencies.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{currency.Code} deleted successfully.");
                 return await Task.FromResult(currency);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }

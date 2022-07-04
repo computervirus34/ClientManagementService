@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ClientManagementService.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,7 +33,7 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> Get()
         {
             var clients = await _unitOfWork.Clients.All();
-
+            _logger.LogInformation($"Total client:{clients.Count()}");
             return Ok(clients);
         }
 
@@ -40,18 +41,19 @@ namespace ClientManagementService.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
-            var clients = await _unitOfWork.Clients.GetByID(id);
-
-            if (clients == null)
+            var client = await _unitOfWork.Clients.GetByID(id);
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(client)}");
+            if (client == null)
                 return NotFound();
 
-            return Ok(clients);
+            return Ok(client);
         }
 
         // post api/<BranchController>
         [HttpPost]
         public async Task<ActionResult<Client>> Post(Client client)
         {
+            _logger.LogInformation($"Client Info:{JsonConvert.SerializeObject(client)}");
             if (ModelState.IsValid)
             {
                 try
@@ -59,10 +61,13 @@ namespace ClientManagementService.Controllers
                     await _unitOfWork.Clients.Add(client);
                     await _unitOfWork.CompleteAsync();
                     var clientDet = await _unitOfWork.Clients.GetByID(client.Id);
+                    _logger.LogInformation($"Client Info:{JsonConvert.SerializeObject(clientDet)}");
+
                     return await Task.FromResult(clientDet);
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return new JsonResult(ex.Message) { StatusCode = 500 };
                 }
             }
@@ -73,7 +78,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Client>> Put(int id, Client client)
         {
-
+            _logger.LogInformation($"Client Update Info:{JsonConvert.SerializeObject(client)}");
             if (id != client.Id)
             {
                 return BadRequest();
@@ -86,10 +91,12 @@ namespace ClientManagementService.Controllers
                 await _unitOfWork.Clients.Update(client);
                 await _unitOfWork.CompleteAsync();
                 var clientDet = await _unitOfWork.Clients.GetByID(client.Id);
+                _logger.LogInformation($"{id}:{client.CompanyName} updated successfully.");
                 return await Task.FromResult(clientDet);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
@@ -105,11 +112,14 @@ namespace ClientManagementService.Controllers
                     return NotFound();
                 await _unitOfWork.Clients.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{client.CompanyName} deleted successfully.");
+
                 return await Task.FromResult(client);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }

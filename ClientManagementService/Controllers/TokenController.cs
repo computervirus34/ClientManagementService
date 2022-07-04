@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -34,6 +35,7 @@ namespace ClientManagementService.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(UserToken _userData)
         {
+            _logger.LogInformation(JsonConvert.SerializeObject(_userData));
             try
             {
                 if (_userData != null && _userData.UserId != null && _userData.Password != null)
@@ -61,6 +63,13 @@ namespace ClientManagementService.Controllers
                             claims,
                             expires: DateTime.UtcNow.AddMinutes(30),
                             signingCredentials: signIn);
+
+                        _logger.LogInformation(JsonConvert.SerializeObject(new
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token),
+                            Expiration = token.ValidTo
+                        }));
+
                         return Ok(new
                         {
                             Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -70,6 +79,7 @@ namespace ClientManagementService.Controllers
                     }
                     else
                     {
+                        _logger.LogError("Invalid credentials");
                         return BadRequest("Invalid credentials");
                     }
                 }
@@ -79,7 +89,7 @@ namespace ClientManagementService.Controllers
                 }
             }catch(Exception ex)
             {
-                _logger.LogError(ex.InnerException.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex);
             }
         }

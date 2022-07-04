@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +33,17 @@ namespace ClientManagementService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var branches = await _unitOfWork.Branches.All();
-
-            return Ok(branches);
+            try
+            {
+                var branches = await _unitOfWork.Branches.All();
+                _logger.LogInformation($"Total branch:{branches.Count()}");
+                return Ok(branches);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
         }
         
         // GET api/<BranchController>/5
@@ -42,10 +51,10 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> GetItem(int id)
         {
             var branch = await _unitOfWork.Branches.GetByID(id);
-
+            
             if (branch == null)
                 return NotFound();
-
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(branch)}");
             return Ok(branch);
         }
 
@@ -53,17 +62,19 @@ namespace ClientManagementService.Controllers
         [HttpPost]
         public async Task<ActionResult<Branch>> Post(Branch branch)
         {
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(branch)}");
             if (ModelState.IsValid)
             {
                 try
                 {
                     await _unitOfWork.Branches.Add(branch);
                     await _unitOfWork.CompleteAsync();
-
+                    _logger.LogInformation($"{branch.BranchName} Branch added successfully.");
                     return await Task.FromResult(branch);
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return new JsonResult(ex.Message) { StatusCode = 500 };
                 }
             }
@@ -75,7 +86,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Branch>> Put(int id, Branch branch)
         {
-            
+            _logger.LogInformation($"Branch Update Info:{JsonConvert.SerializeObject(branch)}");
             if (id != branch.Id)
             {
                 return BadRequest();
@@ -87,9 +98,11 @@ namespace ClientManagementService.Controllers
             {
                 await _unitOfWork.Branches.Update(branch);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{branch.BranchName} Branch updated successfully.");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
             return await Task.FromResult(branch);
@@ -106,12 +119,14 @@ namespace ClientManagementService.Controllers
                     return NotFound();
                 await _unitOfWork.Branches.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{branch.BranchName} Branch deleted successfully.");
                 return await Task.FromResult(branch);
             
             }
             catch(Exception ex)
             {
-               return new JsonResult(ex.Message) { StatusCode = 500 };
+                _logger.LogError(ex.Message);
+                return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
     }

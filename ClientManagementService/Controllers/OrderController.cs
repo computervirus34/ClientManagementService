@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> Get()
         {
             var orders = await _unitOfWork.Orders.All();
-
+            _logger.LogInformation($"Total Order:{orders.Count()}");
             return Ok(orders);
         }
         [HttpGet("{id}")]
@@ -41,7 +42,7 @@ namespace ClientManagementService.Controllers
 
             if (order == null)
                 return NotFound();
-
+            _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(order)}");
             return Ok(order);
         }
         // POST api/<OrderController>
@@ -50,6 +51,7 @@ namespace ClientManagementService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Offer Info:{JsonConvert.SerializeObject(order)}");
                 if (order == null || order.OrderItems == null)
                 {
                     return BadRequest();
@@ -62,10 +64,12 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.CompleteAsync();
                 await Task.FromResult(order);
+                _logger.LogInformation($"{order.Id}-Client{order.ArticleNumber} added successfully.");
                 return Ok(order);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.InnerException.Message) { StatusCode = 500 };
             }
         }
@@ -74,6 +78,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Order>> Put(int id, [FromBody] Order order)
         {
+            _logger.LogInformation($"Order Update Info:{JsonConvert.SerializeObject(order)}");
             if (id != order.Id)
             {
                 return BadRequest();
@@ -89,9 +94,11 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.Orders.Update(order);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{order.ArticleNumber} updated successfully.");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
             return await Task.FromResult(order);
@@ -112,11 +119,13 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.Orders.Delete(order.Id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{order.ArticleNumber} deleted successfully.");
                 return await Task.FromResult(order);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }

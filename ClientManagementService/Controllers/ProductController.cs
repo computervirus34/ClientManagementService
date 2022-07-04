@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> Get()
         {
             var products = await _unitOfWork.Products.All();
-
+            _logger.LogInformation($"Total Product:{products.Count()}");
             return Ok(products);
         }
 
@@ -43,42 +44,35 @@ namespace ClientManagementService.Controllers
 
             if (product == null)
                 return NotFound();
-
+            _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(product)}");
             return Ok(product);
         }
-        // GET api/<ProductController>/5
-        //[HttpGet("{category}/{currencyId}")]
-        //public async Task<IActionResult> GetItemByCategory(int category, int currencyId)
-        //{
-        //    var product = await _unitOfWork.Products.GetByCategory(category, currencyId);
-
-        //    if (product == null)
-        //        return NotFound();
-
-        //    return Ok(product);
-        //}
-        // POST api/<ProductController>
+        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Product product)
         {
-            try { 
-            if(product==null || product.ProductPrices == null)
+            try 
             {
-                return BadRequest();
-            }
-            var productPrices = product.ProductPrices;
-            await _unitOfWork.Products.Add(product);
-            foreach(var item in productPrices)
-            {
-                //item.ProductId = product.Id;
-                await _unitOfWork.ProductPrices.Add(item);
-            }
-            await _unitOfWork.CompleteAsync();
-            await Task.FromResult(product);
-            return Ok(product);
+                _logger.LogInformation($"Product Info:{JsonConvert.SerializeObject(product)}");
+                if (product==null || product.ProductPrices == null)
+                {
+                    return BadRequest();
+                }
+                var productPrices = product.ProductPrices;
+                await _unitOfWork.Products.Add(product);
+                foreach(var item in productPrices)
+                {
+                    //item.ProductId = product.Id;
+                    await _unitOfWork.ProductPrices.Add(item);
+                }
+                await _unitOfWork.CompleteAsync();
+                await Task.FromResult(product);
+                _logger.LogInformation($"{product.Id}-{product.Name} added successfully.");
+                return Ok(product);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
@@ -87,6 +81,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Product>> Put(int id, [FromBody] Product product)
         {
+            _logger.LogInformation($"Product Update Info:{JsonConvert.SerializeObject(product)}");
             if (id != product.Id)
             {
                 return BadRequest();
@@ -102,9 +97,11 @@ namespace ClientManagementService.Controllers
                 }    
                 await _unitOfWork.Products.Update(product);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{product.Id}-{product.Name} added successfully.");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
             return await Task.FromResult(product);
@@ -125,11 +122,12 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.Products.Delete(product.Id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{product.Name} deleted successfully.");
                 return await Task.FromResult(product);
-
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }

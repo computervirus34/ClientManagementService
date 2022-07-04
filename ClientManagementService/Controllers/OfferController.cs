@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> Get()
         {
             var offers = await _unitOfWork.Offers.All();
-
+            _logger.LogInformation($"Total Offer:{offers.Count()}");
             return Ok(offers);
         }
 
@@ -41,7 +42,7 @@ namespace ClientManagementService.Controllers
 
             if (offer == null)
                 return NotFound();
-
+            _logger.LogInformation($"Offer Info:{JsonConvert.SerializeObject(offer)}");
             return Ok(offer);
         }
 
@@ -51,6 +52,7 @@ namespace ClientManagementService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Offer Info:{JsonConvert.SerializeObject(offer)}");
                 if (offer == null || offer.OfferItems == null)
                 {
                     return BadRequest();
@@ -63,10 +65,12 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.CompleteAsync();
                 await Task.FromResult(offer);
+                _logger.LogInformation($"{offer.Id}-Client{offer.ArticleNumber} added successfully.");
                 return Ok(offer);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
@@ -75,6 +79,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Offer>> Put(int id, [FromBody] Offer offer)
         {
+            _logger.LogInformation($"Offer Update Info:{JsonConvert.SerializeObject(offer)}");
             if (id != offer.Id)
             {
                 return BadRequest();
@@ -90,9 +95,11 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.Offers.Update(offer);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{offer.ArticleNumber} updated successfully.");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
             return await Task.FromResult(offer);
@@ -113,11 +120,13 @@ namespace ClientManagementService.Controllers
                 }
                 await _unitOfWork.Offers.Delete(offer.Id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{offer.ArticleNumber} deleted successfully.");
                 return await Task.FromResult(offer);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,17 @@ namespace ClientManagementService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var staffs = await _unitOfWork.BranchStaffs.All();
-
-            return Ok(staffs);
+            try
+            {
+                var staffs = await _unitOfWork.BranchStaffs.All();
+                _logger.LogInformation($"Total branch:{staffs.Count()}");
+                return Ok(staffs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<BranchController>/5
@@ -41,10 +50,10 @@ namespace ClientManagementService.Controllers
         public async Task<IActionResult> GetItem(int id)
         {
             var staffs = await _unitOfWork.BranchStaffs.GetByID(id);
-
+            
             if (staffs == null)
                 return NotFound();
-
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(staffs)}");
             return Ok(staffs);
         }
 
@@ -52,6 +61,7 @@ namespace ClientManagementService.Controllers
         [HttpPost]
         public async Task<ActionResult<BranchStaff>> Post([FromBody] BranchStaff branchStaff)
         {
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(branchStaff)}");
             if (ModelState.IsValid)
             {
                 try
@@ -59,12 +69,15 @@ namespace ClientManagementService.Controllers
                     branchStaff.UserId = branchStaff.Email;
                     await _unitOfWork.BranchStaffs.Add(branchStaff);
                     await _unitOfWork.CompleteAsync();
+                    _logger.LogInformation($"{branchStaff.FirstName} added successfully.");
                     var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
                     await Task.FromResult(staffDet);
-                    return Ok(new { Status = "Success", Message = "Staff created successfully." });
+
+                    return Ok(staffDet);
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
                     return new JsonResult(ex.Message) { StatusCode = 500 };
                 }
             }
@@ -75,6 +88,7 @@ namespace ClientManagementService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<BranchStaff>> Put(int id, BranchStaff branchStaff)
         {
+            _logger.LogInformation($"Staff Update Info:{JsonConvert.SerializeObject(branchStaff)}");
 
             if (id != branchStaff.Id)
             {
@@ -88,10 +102,13 @@ namespace ClientManagementService.Controllers
                 await _unitOfWork.BranchStaffs.Update(branchStaff);
                 await _unitOfWork.CompleteAsync();
                 var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
+                _logger.LogInformation($"{id}:{staffDet.FirstName} updated successfully.");
+
                 return await Task.FromResult(staffDet);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
@@ -107,11 +124,13 @@ namespace ClientManagementService.Controllers
                     return NotFound();
                 await _unitOfWork.BranchStaffs.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"{id}:{branchStaff.FirstName} deleted successfully.");
                 return await Task.FromResult(branchStaff);
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
