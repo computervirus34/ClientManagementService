@@ -80,17 +80,17 @@ namespace ClientManagementService.Controllers
                     else
                     {
                         _logger.LogError("Invalid credentials");
-                        return BadRequest("Invalid credentials");
+                        return BadRequest(new {status="Error", message="Invalid UserID or password!" });
                     }
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(new { status = "Error", message = "UserID/Password not provided!" });
                 }
             }catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(ex);
+                return BadRequest(new { status = "Error", message = ex.Message });
             }
         }
     }

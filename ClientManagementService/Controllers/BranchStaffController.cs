@@ -67,9 +67,13 @@ namespace ClientManagementService.Controllers
                 try
                 {
                     branchStaff.UserId = branchStaff.Email;
+                    branchStaff.Password = _unitOfWork.BranchStaffs.GetHash(branchStaff.UserId, branchStaff.Password);
+
                     await _unitOfWork.BranchStaffs.Add(branchStaff);
                     await _unitOfWork.CompleteAsync();
+
                     _logger.LogInformation($"{branchStaff.FirstName} added successfully.");
+
                     var staffDet = await _unitOfWork.BranchStaffs.GetByID(branchStaff.Id);
                     await Task.FromResult(staffDet);
 
@@ -133,6 +137,36 @@ namespace ClientManagementService.Controllers
                 _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<ActionResult<BranchStaff>> ChangePassword([FromBody] PasswordChangeModel passwordChange)
+        {
+            _logger.LogInformation($"Branch Info:{JsonConvert.SerializeObject(passwordChange)}");
+            if(passwordChange.NewPassword!=passwordChange.ConfirmPassword)
+                return new JsonResult("New password and confirm password are not same!") { StatusCode = 500 };
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    bool isSuccess = await _unitOfWork.BranchStaffs.ChangePassword(passwordChange);
+                    await _unitOfWork.CompleteAsync();
+                    
+                    if(!isSuccess)
+                        return NotFound(new { status = "Error", message = "User Id or password is not valid!" });
+                    
+                    _logger.LogInformation($"{passwordChange.UserId} password changed successfully.");
+
+                    return Ok(new { status="Success", message="Password changed successfully."});
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return new JsonResult(ex.Message) { StatusCode = 500 };
+                }
+            }
+            return BadRequest();
         }
     }
 }

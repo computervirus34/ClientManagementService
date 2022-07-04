@@ -22,8 +22,10 @@ namespace ClientManagementService.Models
         public bool IsActive { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime? StopDate { get; set; }
+        [JsonIgnore]
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
+        [JsonIgnore]
         [ForeignKey("CurrencyId")]
         public Currency Currency { get; set; }
     }

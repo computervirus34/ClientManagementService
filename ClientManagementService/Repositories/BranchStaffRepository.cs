@@ -1,11 +1,14 @@
 ﻿using ClientManagementService.Data;
 using ClientManagementService.IRepositories;
 using ClientManagementService.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ClientManagementService.Repositories
@@ -96,7 +99,48 @@ namespace ClientManagementService.Repositories
 
         public async Task<BranchStaff> ValidateUser(string userId, string password)
         {
-            return await _context.BranchStaffs.FirstOrDefaultAsync(o => o.UserId == userId && o.Password == password);
+            var passHash = GetHash(userId,  password);
+            _logger.LogInformation(passHash);
+            return await _context.BranchStaffs.FirstOrDefaultAsync(o => o.UserId == userId && o.Password == passHash);
+        }
+
+        public string GetHash(string userID, string password)
+        {
+            string userIDPassword = userID + password;
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] encrypt;
+            UTF8Encoding encode = new UTF8Encoding();
+            encrypt = md5.ComputeHash(encode.GetBytes(userIDPassword));
+            StringBuilder encryptdata = new StringBuilder();
+            for (int i = 0; i < encrypt.Length; i++)
+            {
+                encryptdata.Append(encrypt[i].ToString());
+            }
+            return encryptdata.ToString();
+        }
+
+        public async Task<bool> ChangePassword(PasswordChangeModel passwordChange)
+        {
+            try
+            {
+                var oldPassHash = GetHash(passwordChange.UserId, passwordChange.CurrentPassword);
+                var passHash = GetHash(passwordChange.UserId, passwordChange.NewPassword);
+                var user = await _dbSet
+                         .Where(o => o.UserId == passwordChange.UserId && o.Password==oldPassHash)
+                         .FirstOrDefaultAsync();
+
+                if (user == null)
+                    return false;
+
+                user.Password = passHash;
+                return true;
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
         }
     }
 }

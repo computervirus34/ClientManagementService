@@ -41,4 +41,16 @@ namespace ClientManagementService.Models
         [Required]
         public string Password { get; set; }
     }
+    public class PasswordChangeModel
+    {
+        [Required]
+        public string UserId { get; set; }
+        [Required]
+        public string CurrentPassword { get; set; }
+        [Required]
+        public string NewPassword { get; set; }
+        [Required]
+        [Compare("NewPassword")]
+        public string ConfirmPassword { get; set; }
+    }
 }
