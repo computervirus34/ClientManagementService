@@ -24,7 +24,7 @@ namespace ClientManagementService.Models
         public int ProductCategoryId { get; set; }
         public string Type { get; set; }
         public string Descripion { get; set; }
-        public int AvailableQuantity { get; set; }
+        //public int AvailableQuantity { get; set; }
         public string Duration { get; set; }
         [Required]
         public bool IsLicenseProduct { get; set; }

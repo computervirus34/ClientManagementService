@@ -20,8 +20,8 @@ namespace ClientManagementService.Models
         public int OfferId { get; set; }
         [Required]
         public int ClientID { get; set; }
-        [Required]
-        public int BranchId { get; set; }
+        //[Required]
+        //public int BranchId { get; set; }
         [Required]
         public DateTime OrderDate { get; set; }
         public string Description { get; set; }

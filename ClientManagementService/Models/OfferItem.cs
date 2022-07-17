@@ -24,9 +24,11 @@ namespace ClientManagementService.Models
         public decimal TaxAmount { get; set; }
         public bool IsDiscountApplied { get; set; }
         public decimal DiscountAmount { get; set; }
+        public decimal ManualDiscount { get; set; }
         [Required]
         public decimal OriginalProductCost { get; set; }
         public string ItemWeight { get; set; }
+        public bool IsPurchased { get; set; }
         public string Comment { get; set; }
         [JsonIgnore]
         [ForeignKey("OfferId")]

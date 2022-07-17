@@ -19,19 +19,26 @@ namespace ClientManagementService.Models
         [Required]
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [Required]
-        public string Gender { get; set; }
+        //[Required]
+        //public string Gender { get; set; }
         public string UserId { get; set; }
         public string Password { get; set; }
+        [Required]
+        public bool IsManager { get; set; }
         public string Contact { get; set; }
         [Required]
         public string Email { get; set; }
         public String Location { get; set; }
         [Required]
         public int BranchId { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
         [JsonIgnore]
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
+        [JsonIgnore]
+        [ForeignKey("DepartmentId")]
+        public Deaprtment Deaprtment { get; set; }
     }
 
     public class UserToken
@@ -53,4 +60,6 @@ namespace ClientManagementService.Models
         [Compare("NewPassword")]
         public string ConfirmPassword { get; set; }
     }
+
+    
 }

@@ -18,10 +18,10 @@ namespace ClientManagementService.Models
         public int Id { get; set; }
         [Required]
         public string BranchName { get; set; }
-        public string ManagerName { get; set; }
+        //public string ManagerName { get; set; }
         public string Contact { get; set; }
         public string Location { get; set; }
-        public string Email { get; set; }
+        //public string Email { get; set; }
         [JsonIgnore]
         public List<BranchStaff> BranchStaffs { get; set; }
         [JsonIgnore]

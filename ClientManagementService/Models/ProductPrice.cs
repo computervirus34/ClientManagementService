@@ -19,6 +19,8 @@ namespace ClientManagementService.Models
         [Required]
         public decimal UnitPrice { get; set; }
         public bool GSTApplicable { get; set; }
+        public string DiscountType { get; set; }
+        public decimal Discount { get; set; }
         public bool IsActive { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime? StopDate { get; set; }
