@@ -82,7 +82,9 @@ namespace ClientManagementService.Repositories
                     return false;
                 existingBranch.FirstName = entity.FirstName;
                 existingBranch.LastName = entity.LastName;
-                existingBranch.Gender = entity.Gender;
+                existingBranch.IsManager = entity.IsManager;
+                existingBranch.Deaprtment = entity.Deaprtment;
+                //existingBranch.Gender = entity.Gender;
                 existingBranch.Contact = entity.Contact;
                 existingBranch.Location = entity.Location;
                 existingBranch.Email = entity.Email;

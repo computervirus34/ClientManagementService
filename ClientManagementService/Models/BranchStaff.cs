@@ -25,22 +25,24 @@ namespace ClientManagementService.Models
         public string Password { get; set; }
         [Required]
         public bool IsManager { get; set; }
+        public Deaprtment Deaprtment { get; set; }
         public string Contact { get; set; }
         [Required]
         public string Email { get; set; }
         public String Location { get; set; }
         [Required]
         public int BranchId { get; set; }
-        [Required]
-        public int DepartmentId { get; set; }
         [JsonIgnore]
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
-        [JsonIgnore]
-        [ForeignKey("DepartmentId")]
-        public Deaprtment Deaprtment { get; set; }
     }
-
+    public enum Deaprtment
+    {
+        Administration,
+        Sales,
+        Support,
+        Management
+    }
     public class UserToken
     {
         [Required]

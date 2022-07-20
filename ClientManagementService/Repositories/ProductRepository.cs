@@ -83,7 +83,7 @@ namespace ClientManagementService.Repositories
                 existingProduct.ProductCategoryId = entity.ProductCategoryId;
                 existingProduct.Type = entity.Type;
                 existingProduct.Descripion = entity.Descripion;
-                existingProduct.AvailableQuantity = entity.AvailableQuantity;
+                //existingProduct.AvailableQuantity = entity.AvailableQuantity;
                 existingProduct.Duration = entity.Duration;
                 existingProduct.IsLicenseProduct = entity.IsLicenseProduct;
                 existingProduct.LicenseType = entity.LicenseType;

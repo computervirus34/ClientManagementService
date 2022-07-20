@@ -19,7 +19,7 @@ namespace ClientManagementService.Data
         }
 
         public virtual DbSet<Branch> Branches { get; set; }
-        public virtual DbSet<Deaprtment> Deaprtments { get; set; }
+        //public virtual DbSet<Deaprtment> Deaprtments { get; set; }
         public virtual DbSet<BranchStaff> BranchStaffs { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
@@ -62,7 +62,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.Email).HasMaxLength(70).IsUnicode(false);
                 entity.Property(e => e.Location).HasMaxLength(200).IsUnicode(false);
                 entity.Property(e => e.BranchId).IsUnicode(false).IsRequired();
-                entity.Property(e => e.DepartmentId).IsUnicode(false).IsRequired();
+                entity.Property(e => e.Deaprtment).IsUnicode(false).IsRequired();
             });
 
             modelBuilder.Entity<Currency>(entity =>
@@ -73,12 +73,12 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.Symbol).HasMaxLength(20).IsUnicode(true);
             });
 
-            modelBuilder.Entity<Deaprtment>(entity =>
-            {
-                entity.ToTable("Deaprtment");
-                entity.Property(e => e.Id).HasColumnName("Id");
-                entity.Property(e => e.Name).HasMaxLength(3).IsUnicode(false).IsRequired();
-            });
+            //modelBuilder.Entity<Deaprtment>(entity =>
+            //{
+            //    entity.ToTable("Deaprtment");
+            //    entity.Property(e => e.Id).HasColumnName("Id");
+            //    entity.Property(e => e.Name).HasMaxLength(3).IsUnicode(false).IsRequired();
+            //});
 
             modelBuilder.Entity<Client>(entity =>
             {
@@ -218,12 +218,14 @@ namespace ClientManagementService.Data
             {
                 entity.ToTable("DiscountRate");
                 entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.ProductCategoryId).IsUnicode(false).IsRequired();
                 entity.Property(e => e.LicenseType).HasMaxLength(20).IsUnicode(false).IsRequired();
                 entity.Property(e => e.SlabFrom).IsRequired().IsUnicode(false);
                 entity.Property(e => e.SlabTo).IsRequired().IsUnicode(false);
                 entity.Property(e => e.DiscountRate).HasColumnType("decimal(10,3)").IsRequired().IsUnicode(false);
                 entity.Property(e => e.IsActive).HasMaxLength(10).IsUnicode(false);
                 entity.Property(e => e.CreatedOn).IsUnicode(false);
+                entity.Property(e => e.UpdatedOn).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

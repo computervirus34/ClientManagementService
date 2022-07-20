@@ -4,14 +4,16 @@ using ClientManagementService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClientManagementService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220720145437_After testing db")]
+    partial class Aftertestingdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,8 +237,6 @@ namespace ClientManagementService.Migrations
                         .IsUnicode(false);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductCategoryId");
 
                     b.ToTable("DiscountRate");
                 });
@@ -715,15 +715,6 @@ namespace ClientManagementService.Migrations
                     b.HasOne("ClientManagementService.Models.Currency", "Currency")
                         .WithMany("Clients")
                         .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ClientManagementService.Models.DiscountRateConfig", b =>
-                {
-                    b.HasOne("ClientManagementService.Models.ProductCategory", "ProductCategory")
-                        .WithMany()
-                        .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

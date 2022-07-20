@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace ClientManagementService.Repositories
 {
-    public class BranchRepository : GenericRepository<Branch>, IBranchRepository
+    public class ProductCategoryRepository : GenericRepository<ProductCategory>, IProductCategoryRepository
     {
 
-        public BranchRepository(
+        public ProductCategoryRepository(
             DatabaseContext context,
             ILogger logger
             ) : base(context, logger)
@@ -21,7 +21,7 @@ namespace ClientManagementService.Repositories
 
         }
 
-        public override async Task<IEnumerable<Branch>> All()
+        public override async Task<IEnumerable<ProductCategory>> All()
         {
             try
             {
@@ -29,8 +29,8 @@ namespace ClientManagementService.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{Repo} All method error.", typeof(BranchRepository));
-                return new List<Branch>();
+                _logger.LogError(ex, "{Repo} All method error.", typeof(ProductCategoryRepository));
+                return new List<ProductCategory>();
             }
         }
 
@@ -52,29 +52,27 @@ namespace ClientManagementService.Repositories
             catch (Exception ex)
             {
 
-                _logger.LogError(ex, "{Repo} Delete method error.", typeof(BranchRepository));
+                _logger.LogError(ex, "{Repo} Delete method error.", typeof(ProductCategoryRepository));
                 return false;
             }
         }
 
-        public override async Task<bool> Update(Branch entity)
+        public override async Task<bool> Update(ProductCategory entity)
         {
             try
             {
-                var existingBranch = await _dbSet.Where(o => o.Id == entity.Id)
+                var exists = await _dbSet.Where(o => o.Id == entity.Id)
                                      .SingleOrDefaultAsync();
-                if (existingBranch == null)
+                if (exists == null)
                     return false;
-                //existingBranch.ManagerName = entity.ManagerName;
-                existingBranch.Contact = entity.Contact;
-                existingBranch.Location = entity.Location;
-                //existingBranch.Email = entity.Email;
+                exists.Name = entity.Name;
+                exists.Description = entity.Description;
 
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{Repo} Update method error.", typeof(BranchRepository));
+                _logger.LogError(ex, "{Repo} Update method error.", typeof(ProductCategoryRepository));
                 return false;
             }
         }

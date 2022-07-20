@@ -79,7 +79,7 @@ namespace ClientManagementService.Repositories
                 if (existingOffer == null)
                     return false;
                 existingOffer.ClientID = entity.ClientID;
-                existingOffer.BranchId = entity.BranchId;
+                //existingOffer.BranchId = entity.BranchId;
                 existingOffer.OfferDate = entity.OfferDate;
                 existingOffer.Description = entity.Description;
                 existingOffer.CustomerCurrency = entity.CustomerCurrency;
