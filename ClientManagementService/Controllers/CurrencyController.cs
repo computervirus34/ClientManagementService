@@ -84,7 +84,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var currencyExists = _unitOfWork.Currencies.GetByID(id);
+            var currencyExists = await _unitOfWork.Currencies.GetByID(id);
             if (currencyExists == null)
                 return NotFound();
             try

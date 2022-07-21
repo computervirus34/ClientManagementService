@@ -33,7 +33,19 @@ namespace ClientManagementService.Repositories
                 return new List<DiscountRateConfig>();
             }
         }
-
+        public async Task<IEnumerable<DiscountRateConfig>> GetDiscountByCategory(int id)
+        {
+            try
+            {
+                return await _dbSet.Include(i => i.ProductCategory).Where(o=>o.ProductCategoryId==id)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} All method error.", typeof(DiscountConfigRepository));
+                return new List<DiscountRateConfig>();
+            }
+        }
         public override async Task<DiscountRateConfig> GetByID(int Id)
         {
             try

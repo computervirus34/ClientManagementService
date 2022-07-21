@@ -121,10 +121,10 @@ namespace ClientManagementService.Repositories
             //    .Select(o=>o.OrderItems.Sum(i=>i.Quantity))
             //    .FirstOrDefaultAsync();
 
-            if (productDetails.IsLicenseProduct && productDetails.LicenseType == "N")
+            if (productDetails.IsLicenseProduct)
             {
                 var discountRates = await _context.DiscountRates
-                    .Where(o => o.IsActive == "Y")
+                    .Where(o => o.IsActive == "Y" && o.ProductCategoryId==productDetails.ProductCategoryId)
                     .OrderBy(o=>o.SlabFrom)
                     .ToListAsync();
                 

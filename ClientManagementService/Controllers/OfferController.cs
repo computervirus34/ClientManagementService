@@ -84,7 +84,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var offerExists = _unitOfWork.Offers.GetByID(id);
+            var offerExists = await _unitOfWork.Offers.GetByID(id);
             if (offerExists == null)
                 return NotFound();
             try

@@ -83,7 +83,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var orderExists = _unitOfWork.Orders.GetByID(id);
+            var orderExists = await _unitOfWork.Orders.GetByID(id);
             if (orderExists == null)
                 return NotFound();
             try

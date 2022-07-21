@@ -98,7 +98,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var branchExists = _unitOfWork.BranchStaffs.GetByID(id);
+            var branchExists = await _unitOfWork.BranchStaffs.GetByID(id);
             if (branchExists == null)
                 return NotFound();
             try

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace ClientManagementService.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        [JsonIgnore]
         public List<Product> Products { get; set; }
     }
 }

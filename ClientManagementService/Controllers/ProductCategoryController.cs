@@ -80,7 +80,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var categoryExists = _unitOfWork.ProductCategories.GetByID(id);
+            var categoryExists = await _unitOfWork.ProductCategories.GetByID(id);
             if (categoryExists == null)
                 return NotFound();
             try

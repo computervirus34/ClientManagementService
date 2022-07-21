@@ -8,5 +8,6 @@ namespace ClientManagementService.IRepositories
 {
     public interface IDiscountConfigRepository : IGenericRepository<DiscountRateConfig>
     {
+        Task<IEnumerable<DiscountRateConfig>> GetDiscountByCategory(int id);
     }
 }

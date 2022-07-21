@@ -86,7 +86,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var productExists = _unitOfWork.Products.GetByID(id);
+            var productExists = await _unitOfWork.Products.GetByID(id);
             if (productExists == null)
                 return NotFound();
             try

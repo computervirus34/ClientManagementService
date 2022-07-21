@@ -46,21 +46,35 @@ namespace ClientManagementService.Controllers
             return Ok(discounts);
         }
 
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetCategoryItems(int id)
+        {
+            var discounts = await _unitOfWork.DiscountConfigs.GetDiscountByCategory(id);
+            _logger.LogInformation($"discounts Info:{JsonConvert.SerializeObject(discounts)}");
+            if (discounts == null)
+                return NotFound();
+
+            return Ok(discounts);
+        }
+
         // post api/<BranchController>
         [HttpPost]
-        public async Task<ActionResult<DiscountRateConfig>> Post(DiscountRateConfig discount)
+        public async Task<ActionResult<DiscountRateConfig>> Post([FromBody] List<DiscountRateConfig> discounts)
         {
-            _logger.LogInformation($"DiscountRateConfig Info:{JsonConvert.SerializeObject(discount)}");
+            _logger.LogInformation($"DiscountRateConfig Info:{JsonConvert.SerializeObject(discounts)}");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _unitOfWork.DiscountConfigs.Add(discount);
+                    foreach(var discount in discounts)
+                    {
+                        await _unitOfWork.DiscountConfigs.Add(discount);
+                    }
                     await _unitOfWork.CompleteAsync();
-                    var discountDet = await _unitOfWork.DiscountConfigs.GetByID(discount.Id);
-                    _logger.LogInformation($"discount Info:{JsonConvert.SerializeObject(discountDet)}");
+                    //var discountDet = await _unitOfWork.DiscountConfigs.GetDiscountByCategory(discounts.);
+                    _logger.LogInformation($"discount Info added successfully.");
 
-                    return await Task.FromResult(discountDet);
+                    return new JsonResult("Discount added successfully.") { StatusCode = 200 };
                 }
                 catch (Exception ex)
                 {
@@ -80,7 +94,7 @@ namespace ClientManagementService.Controllers
             {
                 return BadRequest();
             }
-            var discountExists = _unitOfWork.DiscountConfigs.GetByID(id);
+            var discountExists = await _unitOfWork.DiscountConfigs.GetByID(id);
             if (discountExists == null)
                 return NotFound();
             try
