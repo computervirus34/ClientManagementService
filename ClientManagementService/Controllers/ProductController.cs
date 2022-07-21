@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ClientManagementService.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -47,7 +47,18 @@ namespace ClientManagementService.Controllers
             _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(product)}");
             return Ok(product);
         }
-        
+
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetCategoryItem(int id)
+        {
+            var products = await _unitOfWork.Products.GetByCategory(id);
+
+            if (products == null)
+                return NotFound();
+            _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(products.Count())}");
+            return Ok(products);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Product product)
         {

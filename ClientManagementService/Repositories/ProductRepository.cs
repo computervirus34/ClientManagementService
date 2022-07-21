@@ -145,17 +145,19 @@ namespace ClientManagementService.Repositories
             }
         }
 
-        //public async Task<Product> GetByClientAndCategory(int client, int category)
-        //{
-        //    try
-        //    {
-        //        return await _context.Products.Include(i => i.ProductPrices).FirstOrDefaultAsync(i => i.Id == Id);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "{Repo} All method error.", typeof(ProductRepository));
-        //        return new Product();
-        //    }
-        //}
+        public async Task<IEnumerable<Product>> GetByCategory(int category)
+        {
+            try
+            {
+                return await _context.Products.Include(i => i.ProductPrices)
+                        .Where(o=>o.ProductCategoryId==category)
+                        .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} All method error.", typeof(ProductRepository));
+                return new List<Product>();
+            }
+        }
     }
 }

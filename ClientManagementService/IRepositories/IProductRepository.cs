@@ -8,7 +8,7 @@ namespace ClientManagementService.IRepositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        //Task<IEnumerable<Product>> GetByCategory(int category, int currencyId);
+        Task<IEnumerable<Product>> GetByCategory(int category);
         //Task<Product> GetPriceByClient(int Id, int client);
         Task<ProductPriceCalculationModel> GetProductPrice(int prodcutId, int quantity, int clientId);
     }
