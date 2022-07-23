@@ -12,6 +12,7 @@ namespace ClientManagementService.Models
         public Order()
         {
             OrderItems = new List<OrderItem>();
+            ProductAdditionalInfos = new List<ProductAdditionalInfo>();
         }
         [Key]
         public int Id { get; set; }
@@ -39,5 +40,6 @@ namespace ClientManagementService.Models
         public string Comment { get; set; }
         public string CreatedBy { get; set; }
         public List<OrderItem> OrderItems { get; set; }
+        public List<ProductAdditionalInfo> ProductAdditionalInfos { get; set; }
     }
 }

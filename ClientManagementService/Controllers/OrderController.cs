@@ -45,6 +45,28 @@ namespace ClientManagementService.Controllers
             _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(order)}");
             return Ok(order);
         }
+
+        [HttpGet("client/{id}")]
+        public async Task<IActionResult> GetItemByClient(int id)
+        {
+            var order = await _unitOfWork.Orders.GetByClient(id);
+
+            if (order == null)
+                return NotFound();
+            _logger.LogInformation($"Order Info:{order}");
+            return Ok(order);
+        }
+
+        [HttpGet("client/{id}/{catId}")]
+        public async Task<IActionResult> GetItemByClientAndCat(int id, int catId)
+        {
+            var order = await _unitOfWork.Orders.GetByClientAndCat(id, catId);
+
+            if (order == null)
+                return NotFound();
+            _logger.LogInformation($"Order Info:{order}");
+            return Ok(order);
+        }
         // POST api/<OrderController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Order order)

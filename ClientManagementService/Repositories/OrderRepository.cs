@@ -24,7 +24,10 @@ namespace ClientManagementService.Repositories
         {
             try
             {
-                return await _dbSet.Include(i => i.OrderItems).ToListAsync();
+                return await _dbSet
+                    .Include(i => i.OrderItems)
+                    .Include(i=>i.ProductAdditionalInfos)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -37,13 +40,47 @@ namespace ClientManagementService.Repositories
         {
             try
             {
-                return await _context.Orders.Include(i => i.OrderItems)
+                return await _context.Orders
+                    .Include(i => i.OrderItems)
+                    .Include(i => i.ProductAdditionalInfos)
                     .FirstOrDefaultAsync(i => i.Id == Id);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "{Repo} All method error.", typeof(OrderRepository));
                 return new Order();
+            }
+        }
+
+        public async Task<IEnumerable<Order>> GetByClient(int id)
+        {
+            try
+            {
+                return await _dbSet
+                    .Include(i => i.OrderItems)
+                    .Include(i => i.ProductAdditionalInfos)
+                    .Where(i => i.ClientID == id).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} All method error.", typeof(OrderRepository));
+                return new List<Order>();
+            }
+        }
+
+        public async Task<IEnumerable<Order>> GetByClientAndCat(int id, int catId)
+        {
+            try
+            {
+                return await _dbSet
+                    .Include(i => i.OrderItems.Where(o=>o.Product.ProductCategoryId==catId))
+                    .Include(i => i.ProductAdditionalInfos)
+                    .Where(i => i.ClientID == id).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} All method error.", typeof(OrderRepository));
+                return new List<Order>();
             }
         }
 

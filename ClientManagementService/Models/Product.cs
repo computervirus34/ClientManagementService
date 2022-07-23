@@ -13,6 +13,7 @@ namespace ClientManagementService.Models
         public Product()
         {
             ProductPrices = new List<ProductPrice>();
+            CourseSchedules = new List<CourseSchedule>();
         }
         [Key]
         public int Id { get; set; }
@@ -36,6 +37,7 @@ namespace ClientManagementService.Models
         [ForeignKey("ProductCategoryId")]
         public ProductCategory ProductCategory { get; set; }
         public List<ProductPrice> ProductPrices { get; set; }
+        public List<CourseSchedule> CourseSchedules { get; set; }
     }
 
     public class ProductPriceCalculationModel

@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClientManagementService.IRepositories
 {
-    public interface IOrderRepository : IGenericRepository<Order>
+    public interface IProductAdditionalInfoRepository : IGenericRepository<ProductAdditionalInfo>
     {
-        Task<IEnumerable<Order>> GetByClient(int id);
-        Task<IEnumerable<Order>> GetByClientAndCat(int id, int catId);
     }
 }

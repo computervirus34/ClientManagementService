@@ -44,7 +44,7 @@ namespace ClientManagementService.Controllers
 
             if (product == null)
                 return NotFound();
-            _logger.LogInformation($"Order Info:{JsonConvert.SerializeObject(product)}");
+            _logger.LogInformation($"Order Info:{product}");
             return Ok(product);
         }
 

@@ -25,10 +25,12 @@ namespace ClientManagementService.Data
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<CourseSchedule> CourseSchedules { get; set; }
         public virtual DbSet<ProductPrice> ProductPrices { get; set; }
         public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferItem> OfferItems { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<ProductAdditionalInfo> ProductAdditionalInfos{ get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<DiscountRateConfig> DiscountRates { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -226,6 +228,33 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.IsActive).HasMaxLength(10).IsUnicode(false);
                 entity.Property(e => e.CreatedOn).IsUnicode(false);
                 entity.Property(e => e.UpdatedOn).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CourseSchedule>(entity =>
+            {
+                entity.ToTable("CourseSchedule");
+                entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.ProductId).IsUnicode(false).IsRequired();
+                entity.Property(e => e.Datetime).IsUnicode(false).IsRequired();
+                entity.Property(e => e.CourseContent).HasMaxLength(2000).IsUnicode(true);
+                entity.Property(e => e.Venue).HasMaxLength(200).IsUnicode(true);
+                entity.Property(e => e.Mode).HasMaxLength(100).IsUnicode(true);
+                entity.Property(e => e.IsActive).HasMaxLength(10).IsUnicode(false);
+                entity.Property(e => e.CreatedOn).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProductAdditionalInfo>(entity =>
+            {
+                entity.ToTable("ProductAdditionalInfo");
+                entity.Property(e => e.Id).HasColumnName("Id");
+                entity.Property(e => e.ProductId).IsUnicode(false).IsRequired();
+                entity.Property(e => e.OrderId).IsUnicode(false).IsRequired();
+                entity.Property(e => e.Admin).IsUnicode(false);
+                entity.Property(e => e.UserName).HasMaxLength(100).IsUnicode(false);
+                entity.Property(e => e.LicenseType).HasMaxLength(100).IsUnicode(false);
+                entity.Property(e => e.ProtectionType).HasMaxLength(100).IsUnicode(false);
+                entity.Property(e => e.NumberOfPlaces).HasColumnType("int(5)").IsUnicode(false);
+                entity.Property(e => e.IsSmallBusiness).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

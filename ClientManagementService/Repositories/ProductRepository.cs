@@ -24,7 +24,9 @@ namespace ClientManagementService.Repositories
         {
             try
             {
-                return await _dbSet.Include(i => i.ProductPrices).ToListAsync();
+                return await _dbSet.Include(i => i.ProductPrices)
+                    .Include(i=>i.CourseSchedules)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -37,8 +39,9 @@ namespace ClientManagementService.Repositories
         {
             try
             {
-                return await _context.Products.Include(i => i.ProductPrices)
-                    .FirstOrDefaultAsync(i => i.Id == Id);
+                return await _dbSet.Include(i => i.ProductPrices)
+                    .Include(i => i.CourseSchedules)
+                    .FirstOrDefaultAsync(o => o.Id == Id);
             }
             catch (Exception ex)
             {
@@ -149,7 +152,8 @@ namespace ClientManagementService.Repositories
         {
             try
             {
-                return await _context.Products.Include(i => i.ProductPrices)
+                return await _dbSet.Include(i => i.ProductPrices)
+                        .Include(i => i.CourseSchedules)
                         .Where(o=>o.ProductCategoryId==category)
                         .ToListAsync();
             }
