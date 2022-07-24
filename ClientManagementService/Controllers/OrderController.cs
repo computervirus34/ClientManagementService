@@ -84,6 +84,11 @@ namespace ClientManagementService.Controllers
                 {
                     await _unitOfWork.OrderItems.Add(item);
                 }
+
+                foreach (var item in order.ProductAdditionalInfos)
+                {
+                    await _unitOfWork.ProductAdditionalInfos.Add(item);
+                }
                 await _unitOfWork.CompleteAsync();
                 await Task.FromResult(order);
                 _logger.LogInformation($"{order.Id}-Client{order.ArticleNumber} added successfully.");
@@ -112,7 +117,26 @@ namespace ClientManagementService.Controllers
             {
                 foreach (var item in order.OrderItems)
                 {
-                    await _unitOfWork.OrderItems.Update(item);
+                    if (item.Id == 0)
+                    {
+                        await _unitOfWork.OrderItems.Add(item);
+                    }
+                    else
+                    {
+                        await _unitOfWork.OrderItems.Update(item);
+                    }
+                }
+
+                foreach (var item in order.ProductAdditionalInfos)
+                {
+                    if (item.Id == 0)
+                    {
+                        await _unitOfWork.ProductAdditionalInfos.Add(item);
+                    }
+                    else
+                    {
+                        await _unitOfWork.ProductAdditionalInfos.Update(item);
+                    }
                 }
                 await _unitOfWork.Orders.Update(order);
                 await _unitOfWork.CompleteAsync();
@@ -139,6 +163,12 @@ namespace ClientManagementService.Controllers
                 {
                     await _unitOfWork.OrderItems.Delete(item.Id);
                 }
+
+                foreach (var item in order.ProductAdditionalInfos)
+                {
+                    await _unitOfWork.ProductAdditionalInfos.Delete(item.Id);
+                }
+
                 await _unitOfWork.Orders.Delete(order.Id);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInformation($"{id}:{order.ArticleNumber} deleted successfully.");

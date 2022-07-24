@@ -76,6 +76,13 @@ namespace ClientManagementService.Controllers
                     //item.ProductId = product.Id;
                     await _unitOfWork.ProductPrices.Add(item);
                 }
+
+                foreach (var item in product.CourseSchedules)
+                {
+                    //item.ProductId = product.Id;
+                    await _unitOfWork.CourseSchedules.Add(item);
+                }
+
                 await _unitOfWork.CompleteAsync();
                 await Task.FromResult(product);
                 _logger.LogInformation($"{product.Id}-{product.Name} added successfully.");
@@ -104,8 +111,29 @@ namespace ClientManagementService.Controllers
             {
                 foreach(var item in product.ProductPrices)
                 {
-                    await _unitOfWork.ProductPrices.Update(item);
-                }    
+                    //var itemExists = _unitOfWork.ProductPrices.GetByID()
+                    if (item.Id == 0)
+                    {
+                        await _unitOfWork.ProductPrices.Add(item);
+                    }
+                    else
+                    {
+                        await _unitOfWork.ProductPrices.Update(item);
+                    }
+                }
+                foreach (var item in product.CourseSchedules)
+                {
+                    //var itemExists = _unitOfWork.ProductPrices.GetByID()
+                    if (item.Id == 0)
+                    {
+                        await _unitOfWork.CourseSchedules.Add(item);
+                    }
+                    else
+                    {
+                        await _unitOfWork.CourseSchedules.Update(item);
+                    }
+                }
+
                 await _unitOfWork.Products.Update(product);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInformation($"{product.Id}-{product.Name} added successfully.");
@@ -131,6 +159,12 @@ namespace ClientManagementService.Controllers
                 {
                     await _unitOfWork.ProductPrices.Delete(item.Id);
                 }
+
+                foreach (var item in product.CourseSchedules)
+                {
+                    await _unitOfWork.CourseSchedules.Delete(item.Id);
+                }
+
                 await _unitOfWork.Products.Delete(product.Id);
                 await _unitOfWork.CompleteAsync();
                 _logger.LogInformation($"{id}:{product.Name} deleted successfully.");

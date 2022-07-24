@@ -20,10 +20,12 @@ namespace ClientManagementService.Data
         public IProductRepository Products { get; set; }
         public IDiscountConfigRepository DiscountConfigs { get; set; }
         public IProductPriceRepository ProductPrices { get; set; }
+        public ICourseScheduleRepository CourseSchedules { get; set; }
         public IOfferRepository Offers { get; set; }
         public IOfferItemRepository OfferItems { get; set; }
         public IOrderRepository Orders { get; set; }
         public IOrderItemRepository OrderItems { get; set; }
+        public IProductAdditionalInfoRepository ProductAdditionalInfos { get; set; }
         public UnitOfWork(
             DatabaseContext context,
             ILoggerFactory loggerFactory
@@ -43,6 +45,8 @@ namespace ClientManagementService.Data
             OfferItems = new OfferItemRepository(_context, _logger);
             Orders = new OrderRepository(_context, _logger);
             OrderItems = new OrderItemRepository(_context, _logger);
+            CourseSchedules = new CourseScheduleRepository(_context, _logger);
+            ProductAdditionalInfos = new ProductAdditionalInfoRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

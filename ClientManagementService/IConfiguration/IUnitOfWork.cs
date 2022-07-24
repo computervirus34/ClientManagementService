@@ -16,10 +16,12 @@ namespace ClientManagementService
         public IProductRepository Products { get; }
         public IDiscountConfigRepository DiscountConfigs { get; }
         public IProductPriceRepository ProductPrices { get; }
+        public ICourseScheduleRepository CourseSchedules { get; }
         public IOfferRepository Offers { get; }
         public IOfferItemRepository OfferItems { get; }
         public IOrderRepository Orders { get; }
         public IOrderItemRepository OrderItems { get; }
+        public IProductAdditionalInfoRepository ProductAdditionalInfos { get; }
         Task CompleteAsync();
     }
 }
