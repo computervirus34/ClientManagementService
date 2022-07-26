@@ -253,7 +253,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.UserName).HasMaxLength(100).IsUnicode(false);
                 entity.Property(e => e.LicenseType).HasMaxLength(100).IsUnicode(false);
                 entity.Property(e => e.ProtectionType).HasMaxLength(100).IsUnicode(false);
-                entity.Property(e => e.NumberOfPlaces).HasColumnType("int(5)").IsUnicode(false);
+                entity.Property(e => e.NumberOfPlaces).IsUnicode(false);
                 entity.Property(e => e.IsSmallBusiness).IsUnicode(false);
             });
 
