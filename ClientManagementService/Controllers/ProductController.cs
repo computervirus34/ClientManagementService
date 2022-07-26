@@ -143,6 +143,7 @@ namespace ClientManagementService.Controllers
                 _logger.LogError(ex.Message);
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
+            product = await _unitOfWork.Products.GetByID(product.Id);
             return await Task.FromResult(product);
         }
 
