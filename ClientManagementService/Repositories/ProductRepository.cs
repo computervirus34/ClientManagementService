@@ -143,8 +143,17 @@ namespace ClientManagementService.Repositories
             }
             else
             {
-                productCost = quantity * productPrice.UnitPrice;
-                return new ProductPriceCalculationModel{ Quantity = quantity, DiscountAmount = 0, ProductCost = productCost, GSTAmount = 0 };
+                if(productPrice.DiscountType=="P")
+                {
+                    productDiscount = (quantity * productPrice.UnitPrice * productPrice.Discount) / 100;
+                    productCost = (quantity * productPrice.UnitPrice) - productDiscount;
+                }
+                else
+                {
+                    productDiscount = (quantity * productPrice.Discount);
+                    productCost = (quantity * productPrice.UnitPrice) - productDiscount;
+                }
+                return new ProductPriceCalculationModel{ Quantity = quantity, DiscountAmount = productDiscount, ProductCost = productCost, GSTAmount = 0 };
             }
         }
 

@@ -90,7 +90,7 @@ namespace ClientManagementService.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"{ex.Message} {ex.InnerException}" );
                 return new JsonResult(ex.Message) { StatusCode = 500 };
             }
         }
