@@ -64,7 +64,7 @@ namespace ClientManagementService.Data
                 entity.Property(e => e.Email).HasMaxLength(70).IsUnicode(false);
                 entity.Property(e => e.Location).HasMaxLength(200).IsUnicode(false);
                 entity.Property(e => e.BranchId).IsUnicode(false).IsRequired();
-                entity.Property(e => e.Deaprtment).IsUnicode(false).IsRequired();
+                entity.Property(e => e.Department).IsUnicode(false).IsRequired();
             });
 
             modelBuilder.Entity<Currency>(entity =>
