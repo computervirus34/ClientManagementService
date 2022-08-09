@@ -98,5 +98,24 @@ namespace ClientManagementService.Repositories
                 return false;
             }
         }
+        
+        public async Task<bool> UpdateOfferPurchaseDate(int id, DateTime date)
+        {
+            try
+            {
+
+                var existingOffer = await _dbSet.Where(o => o.Id == id)
+                                     .SingleOrDefaultAsync();
+                if (existingOffer == null)
+                    return false;
+                existingOffer.PurchaseDate = date;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} Update method error.", typeof(OfferRepository));
+                return false;
+            }
+        }
     }
 }

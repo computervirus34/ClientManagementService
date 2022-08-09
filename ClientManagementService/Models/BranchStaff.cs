@@ -25,7 +25,7 @@ namespace ClientManagementService.Models
         public string Password { get; set; }
         [Required]
         public bool IsManager { get; set; }
-        public Deaprtment Deaprtment { get; set; }
+        public Department Department { get; set; }
         public string Contact { get; set; }
         [Required]
         public string Email { get; set; }
@@ -36,7 +36,7 @@ namespace ClientManagementService.Models
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
     }
-    public enum Deaprtment
+    public enum Department
     {
         Administration,
         Sales,

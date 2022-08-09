@@ -8,5 +8,6 @@ namespace ClientManagementService.IRepositories
 {
     public interface IOfferItemRepository:IGenericRepository<OfferItem>
     {
+        Task<bool> UpdatePurchaseFlag(int productId, bool flag);
     }
 }

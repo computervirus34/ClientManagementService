@@ -8,5 +8,6 @@ namespace ClientManagementService.IRepositories
 {
     public interface IOfferRepository : IGenericRepository<Offer>
     {
+        Task<bool> UpdateOfferPurchaseDate(int id, DateTime date);
     }
 }

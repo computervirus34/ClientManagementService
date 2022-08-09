@@ -105,6 +105,32 @@ namespace ClientManagementService.Controllers
             return await Task.FromResult(offer);
         }
 
+
+        [HttpPut("{id}/{date}/")]
+        public async Task<ActionResult> OfferOrderUpdate(int id, DateTime date, [FromBody] List<OfferItem> items)
+        {
+            _logger.LogInformation($"Offer Update Info:{JsonConvert.SerializeObject("Offer "+id+" is updating.")}");
+            
+            var offerExists = await _unitOfWork.Offers.GetByID(id);
+            if (offerExists == null)
+                return NotFound();
+            try
+            {
+                foreach (var item in items)
+                {
+                    await _unitOfWork.OfferItems.UpdatePurchaseFlag(item.Id, item.IsPurchased);
+                }
+                await _unitOfWork.Offers.UpdateOfferPurchaseDate(id, date);
+                await _unitOfWork.CompleteAsync();
+                _logger.LogInformation($"Offer Id: {id} updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new JsonResult(ex.Message) { StatusCode = 500 };
+            }
+            return new JsonResult("Offer updated successfully") { StatusCode = 200 };
+        }
         // DELETE api/<OfferController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Offer>> Delete(int id)

@@ -97,5 +97,24 @@ namespace ClientManagementService.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> UpdatePurchaseFlag(int productId, bool flag)
+        {
+            try
+            {
+
+                var existingProduct = await _dbSet.Where(o => o.Id == productId)
+                                     .SingleOrDefaultAsync();
+                if (existingProduct == null)
+                    return false;
+                existingProduct.IsPurchased = flag;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "{Repo} Update method error.", typeof(OfferItemRepository));
+                return false;
+            }
+        }
     }
 }
